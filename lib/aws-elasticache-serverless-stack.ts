@@ -42,6 +42,13 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
         majorEngineVersion: "7",
+        dailySnapshotTime: "00:00-01:00",
+        snapshotRetentionLimit: 2,
+        tags: [
+          { key: 'environment', value: props.deployEnvironment },
+          { key: 'project', value: props.appName },
+          { key: 'owner', value: props.owner }
+        ]
       },
     );
 
