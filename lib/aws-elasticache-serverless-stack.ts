@@ -36,10 +36,12 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       `${props.resourcePrefix}-ElastiCache-Serverless`,
       {
         engine: "redis",
-        serverlessCacheName: `${props.deployRegion}-ElastiCache-Serverless`,
+        serverlessCacheName: `${props.appName}-${props.deployEnvironment}`,
         securityGroupIds: [elastiCacheSecurityGroup.securityGroupId],
         subnetIds: elastiCacheSubnetIds,
         kmsKeyId: kmsKey.keyId,
+        description: `${props.resourcePrefix}-ElastiCache-Serverless`,
+        majorEngineVersion: "7.0",
       },
     );
 
