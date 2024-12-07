@@ -3,6 +3,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Construct } from 'constructs';
 import { aws_elasticache as ElastiCache } from "aws-cdk-lib";
 import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
+import { aws_kms as kms } from "aws-cdk-lib";
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
 
@@ -25,15 +26,21 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       allowAllOutbound: true,
     });
 
+    const kmsKey = new kms.Key(this, `${props.resourcePrefix}-KMS-Key`, {
+      description: `${props.resourcePrefix}-KMS-Key`,
+      enableKeyRotation: true,
+    });
+
     const elastiCacheServerless = new ElastiCache.CfnServerlessCache(
       this,
       `${props.resourcePrefix}-ElastiCache-Serverless`,
       {
         engine: "redis",
-        serverlessCacheName: `${props.resourcePrefix}-ElastiCache-Serverless`,
+        serverlessCacheName: `${props.deployRegion}-ElastiCache-Serverless`,
         securityGroupIds: [elastiCacheSecurityGroup.securityGroupId],
         subnetIds: elastiCacheSubnetIds,
-      }
+        kmsKeyId: kmsKey.keyId,
+      },
     );
 
     // export elastiCacheSecurityGroup Id
