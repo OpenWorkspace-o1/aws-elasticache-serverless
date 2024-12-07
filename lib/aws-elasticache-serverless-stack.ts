@@ -41,7 +41,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         subnetIds: elastiCacheSubnetIds,
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
-        majorEngineVersion: "7.0",
+        majorEngineVersion: "7",
       },
     );
 
