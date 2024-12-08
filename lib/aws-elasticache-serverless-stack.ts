@@ -37,7 +37,6 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     // https://stackoverflow.com/questions/46569432/does-redis-use-a-username-for-authentication
     // Replaced redis with Valkey https://github.com/infiniflow/ragflow/pull/3164/files
 
-    console.log('props.valkeyUserPassword', props.valkeyUserPassword);
     if (!validatePassword(props.valkeyUserPassword)) {
       throw new Error('Password must be at least 16 characters long, maximum 128 characters, and contain a mix of uppercase, lowercase, numbers and special characters.');
     }
