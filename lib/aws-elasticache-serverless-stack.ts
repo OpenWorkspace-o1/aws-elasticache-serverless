@@ -55,6 +55,11 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       userIds: [user.ref],
     });
 
+    // check if the engine version is supported
+    if (!['7', '8'].includes(props.valkeyEngineVersion)) {
+      throw new Error('Unsupported Valkey engine version. Supported versions are 7 and 8.');
+    }
+
     const elastiCacheServerless = new ElastiCache.CfnServerlessCache(
       this,
       `${props.resourcePrefix}-ElastiCache-Serverless`,
