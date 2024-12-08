@@ -39,7 +39,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
 
     console.log('props.valkeyUserPassword', props.valkeyUserPassword);
     if (!validatePassword(props.valkeyUserPassword)) {
-      throw new Error('Password must be at least 16 characters long, maximum 128 characters, and contain a mix of uppercase, lowercase, numbers and special characters');
+      throw new Error('Password must be at least 16 characters long, maximum 128 characters, and contain a mix of uppercase, lowercase, numbers and special characters.');
     }
 
     const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {

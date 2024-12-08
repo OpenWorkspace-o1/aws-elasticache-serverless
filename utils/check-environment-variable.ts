@@ -35,7 +35,32 @@ export function isNotEmptyArray<T>(inputArray: T[] | undefined): boolean {
  * @returns {boolean} - Returns true if the password is valid, otherwise false.
  */
 export function validatePassword(password: string): boolean {
-    return password.length >= 16 && password.length <= 128 && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,128}$/.test(password);
+    // Check length requirements (16-128 characters)
+    if (password.length < 16 || password.length > 128) {
+        return false;
+    }
+
+    // Check for uppercase letters
+    if (!/[A-Z]/.test(password)) {
+        return false;
+    }
+
+    // Check for lowercase letters
+    if (!/[a-z]/.test(password)) {
+        return false;
+    }
+
+    // Check for numbers
+    if (!/[0-9]/.test(password)) {
+        return false;
+    }
+
+    // Check for special characters
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+        return false;
+    }
+
+    return true;
 }
 
 /**
