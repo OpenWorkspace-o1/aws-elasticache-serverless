@@ -28,3 +28,12 @@ export function booleanParser(enable: string | undefined): boolean {
 export function isNotEmptyArray<T>(inputArray: T[] | undefined): boolean {
     return !!inputArray?.length;
 }
+
+/**
+ * Validates a password to ensure it meets the requirements. Password must be at least 16 characters long and contain a mix of uppercase, lowercase, numbers and special characters.
+ * @param password - The password to validate.
+ * @returns {boolean} - Returns true if the password is valid, otherwise false.
+ */
+export function validatePassword(password: string): boolean {
+    return password.length >= 16 && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$/.test(password);
+}

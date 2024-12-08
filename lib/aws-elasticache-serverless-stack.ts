@@ -6,6 +6,7 @@ import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
+import { validatePassword } from '../utils/check-environment-variable';
 
 export class AwsElasticacheServerlessStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: AwsElasticacheServerlessStackProps) {
@@ -35,6 +36,10 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-user.html
     // https://stackoverflow.com/questions/46569432/does-redis-use-a-username-for-authentication
     // Replaced redis with Valkey https://github.com/infiniflow/ragflow/pull/3164/files
+
+    if (!validatePassword(props.valkeyUserPassword)) {
+      throw new Error('Password must be at least 16 characters long and contain a mix of uppercase, lowercase, numbers and special characters');
+    }
 
     const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {
       engine: "valkey",
