@@ -3,7 +3,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Construct } from 'constructs';
 import { aws_elasticache as ElastiCache } from "aws-cdk-lib";
 import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
-import { aws_kms as kms } from "aws-cdk-lib";
+import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
 
@@ -31,24 +31,29 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       enableKeyRotation: true,
     });
 
+    // todo create user and group (CfnUser, CfnUserGroup)
+    // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-user.html
+    // https://stackoverflow.com/questions/46569432/does-redis-use-a-username-for-authentication
+    // Replaced redis with Valkey https://github.com/infiniflow/ragflow/pull/3164/files
+
     const elastiCacheServerless = new ElastiCache.CfnServerlessCache(
       this,
       `${props.resourcePrefix}-ElastiCache-Serverless`,
       {
-        engine: "redis",
+        engine: "valkey",
         serverlessCacheName: `${props.appName}-${props.deployEnvironment}`,
         securityGroupIds: [elastiCacheSecurityGroup.securityGroupId],
         subnetIds: elastiCacheSubnetIds,
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
-        majorEngineVersion: "7",
-        dailySnapshotTime: "00:00-01:00",
+        majorEngineVersion: "8",
+        dailySnapshotTime: "00:00",
         snapshotRetentionLimit: 2,
         tags: [
           { key: 'environment', value: props.deployEnvironment },
           { key: 'project', value: props.appName },
           { key: 'owner', value: props.owner }
-        ]
+        ],
       },
     );
 
