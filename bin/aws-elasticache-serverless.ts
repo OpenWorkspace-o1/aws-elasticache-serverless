@@ -24,6 +24,8 @@ checkEnvVariables('APP_NAME',
     'OWNER',
     'VPC_ID',
     'VALKEY_USER_PASSWORD',
+    'VALKEY_ENGINE_VERSION',
+    'VALKEY_USER_NAME',
 );
 
 const { CDK_DEFAULT_ACCOUNT: account } = process.env;
