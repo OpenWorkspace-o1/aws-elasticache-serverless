@@ -11,4 +11,5 @@ export interface AwsElasticacheServerlessStackProps extends StackProps {
     readonly valkeyEngineVersion: string;
     readonly valkeyUserName: string;
     readonly valkeyUserPassword: string;
+    readonly redisEngine: string;
 }

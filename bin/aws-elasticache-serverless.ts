@@ -26,6 +26,7 @@ checkEnvVariables('APP_NAME',
     'VALKEY_USER_PASSWORD',
     'VALKEY_ENGINE_VERSION',
     'VALKEY_USER_NAME',
+    'REDIS_ENGINE',
 );
 
 const { CDK_DEFAULT_ACCOUNT: account } = process.env;
@@ -60,6 +61,7 @@ const stackProps: AwsElasticacheServerlessStackProps = {
     valkeyUserPassword: process.env.VALKEY_USER_PASSWORD!,
     valkeyEngineVersion: process.env.VALKEY_ENGINE_VERSION!,
     valkeyUserName: process.env.VALKEY_USER_NAME!,
+    redisEngine: process.env.REDIS_ENGINE!,
 };
 new AwsElasticacheServerlessStack(app, `AwsElasticacheServerlessStack`, {
     ...stackProps,
