@@ -23,6 +23,9 @@ checkEnvVariables('APP_NAME',
     'VPC_SUBNET_TYPE',
     'OWNER',
     'VPC_ID',
+    'VALKEY_USER_PASSWORD',
+    'VALKEY_ENGINE_VERSION',
+    'VALKEY_USER_NAME',
 );
 
 const { CDK_DEFAULT_ACCOUNT: account } = process.env;
@@ -54,6 +57,9 @@ const stackProps: AwsElasticacheServerlessStackProps = {
     vpcSubnetType: process.env.VPC_SUBNET_TYPE!,
     owner,
     vpcId: process.env.VPC_ID!,
+    valkeyUserPassword: process.env.VALKEY_USER_PASSWORD!,
+    valkeyEngineVersion: process.env.VALKEY_ENGINE_VERSION!,
+    valkeyUserName: process.env.VALKEY_USER_NAME!,
 };
 new AwsElasticacheServerlessStack(app, `AwsElasticacheServerlessStack`, {
     ...stackProps,

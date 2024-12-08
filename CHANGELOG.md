@@ -1,5 +1,23 @@
 ## 2024-12-08
 
+### Added
+- Added Valkey configuration for AWS ElastiCache Serverless
+  * Introduced new environment variables: `VALKEY_USER_PASSWORD`, `VALKEY_ENGINE_VERSION`, `VALKEY_USER_NAME`
+  * Implemented ElastiCache user and user group creation
+  * Added password and engine version validation utilities
+
+### Changed
+- Updated ElastiCache Serverless stack to support dynamic Valkey configuration
+  * Enabled dynamic Valkey engine version selection
+  * Added user group association with ElastiCache Serverless cache
+
+### Security
+- Implemented password validation to ensure strong credentials
+  * Enforced minimum 16-character password with mixed character types
+  * Added engine version validation to support only specific Valkey versions
+
+## 2024-12-08
+
 ### Changed
 - Updated ElastiCache Serverless configuration to use `valkey` engine
 - Upgraded ElastiCache major engine version from `7` to `8`

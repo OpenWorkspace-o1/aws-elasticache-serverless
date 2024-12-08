@@ -6,6 +6,7 @@ import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
+import { validatePassword, validateValkeyEngineVersion } from '../utils/check-environment-variable';
 
 export class AwsElasticacheServerlessStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: AwsElasticacheServerlessStackProps) {
@@ -36,6 +37,29 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     // https://stackoverflow.com/questions/46569432/does-redis-use-a-username-for-authentication
     // Replaced redis with Valkey https://github.com/infiniflow/ragflow/pull/3164/files
 
+    if (!validatePassword(props.valkeyUserPassword)) {
+      throw new Error('Password must be at least 16 characters long, maximum 128 characters, and contain a mix of uppercase, lowercase, numbers and special characters.');
+    }
+
+    const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {
+      engine: "valkey",
+      noPasswordRequired: false,
+      userId: `${props.appName}-user`,
+      userName: props.valkeyUserName,
+      passwords: [props.valkeyUserPassword],
+    });
+
+    const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
+      engine: "valkey",
+      userGroupId: `${props.appName}-user-group`,
+      userIds: [user.ref],
+    });
+
+    // check if the engine version is supported
+    if (!validateValkeyEngineVersion(props.valkeyEngineVersion)) {
+      throw new Error('Unsupported Valkey engine version. Supported versions are 7 and 8.');
+    }
+
     const elastiCacheServerless = new ElastiCache.CfnServerlessCache(
       this,
       `${props.resourcePrefix}-ElastiCache-Serverless`,
@@ -46,7 +70,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         subnetIds: elastiCacheSubnetIds,
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
-        majorEngineVersion: "8",
+        majorEngineVersion: props.valkeyEngineVersion,
         dailySnapshotTime: "00:00",
         snapshotRetentionLimit: 2,
         tags: [
@@ -54,6 +78,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
           { key: 'project', value: props.appName },
           { key: 'owner', value: props.owner }
         ],
+        userGroupId: userGroup.ref,
       },
     );
 
