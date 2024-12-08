@@ -39,20 +39,15 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {
       engine: "valkey",
       noPasswordRequired: false,
-      userId: "1234567890-user",
-      userName: "1234567890-user",
-      // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-user-authenticationmode.html
-      authenticationMode: {
-        passwords: [props.valkeyUserPassword],
-        type: "password", // Allowed values: password | no-password-required | iam
-      },
+      userId: `${props.appName}-user`,
+      userName: props.valkeyUserName,
       passwords: [props.valkeyUserPassword],
     });
 
     const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
       engine: "valkey",
-      userGroupId: "1234567890-user-group",
-      userIds: [user.userId],
+      userGroupId: `${props.appName}-user-group`,
+      userIds: [user.ref],
     });
 
     const elastiCacheServerless = new ElastiCache.CfnServerlessCache(
@@ -65,7 +60,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         subnetIds: elastiCacheSubnetIds,
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
-        majorEngineVersion: "8",
+        majorEngineVersion: props.valkeyEngineVersion,
         dailySnapshotTime: "00:00",
         snapshotRetentionLimit: 2,
         tags: [
@@ -73,7 +68,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
           { key: 'project', value: props.appName },
           { key: 'owner', value: props.owner }
         ],
-        userGroupId: userGroup.userGroupId,
+        userGroupId: userGroup.ref,
       },
     );
 

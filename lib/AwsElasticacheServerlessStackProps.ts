@@ -8,5 +8,7 @@ export interface AwsElasticacheServerlessStackProps extends StackProps {
     readonly vpcSubnetType: string;
     readonly owner: string;
     readonly vpcId: string;
+    readonly valkeyEngineVersion: string;
+    readonly valkeyUserName: string;
     readonly valkeyUserPassword: string;
 }

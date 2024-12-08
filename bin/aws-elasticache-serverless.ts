@@ -56,6 +56,8 @@ const stackProps: AwsElasticacheServerlessStackProps = {
     owner,
     vpcId: process.env.VPC_ID!,
     valkeyUserPassword: process.env.VALKEY_USER_PASSWORD!,
+    valkeyEngineVersion: process.env.VALKEY_ENGINE_VERSION!,
+    valkeyUserName: process.env.VALKEY_USER_NAME!,
 };
 new AwsElasticacheServerlessStack(app, `AwsElasticacheServerlessStack`, {
     ...stackProps,
