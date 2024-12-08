@@ -71,3 +71,13 @@ export function validatePassword(password: string): boolean {
 export function validateValkeyEngineVersion(engineVersion: string): boolean {
     return ['7', '8'].includes(engineVersion);
 }
+
+/**
+ * Validates a Redis engine.
+ * Supported engines are valkey, redis, memcached.
+ * @param engine - The engine to validate.
+ * @returns {boolean} - Returns true if the engine is supported, otherwise false.
+ */
+export function validateRedisEngine(engine: string): boolean {
+    return ['valkey', 'redis', 'memcached'].includes(engine);
+}

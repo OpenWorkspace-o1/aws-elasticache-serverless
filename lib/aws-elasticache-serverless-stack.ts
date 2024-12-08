@@ -6,7 +6,7 @@ import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
-import { validatePassword, validateValkeyEngineVersion } from '../utils/check-environment-variable';
+import { validatePassword, validateRedisEngine, validateValkeyEngineVersion } from '../utils/check-environment-variable';
 
 export class AwsElasticacheServerlessStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: AwsElasticacheServerlessStackProps) {
@@ -41,8 +41,12 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       throw new Error('Password must be at least 16 characters long, maximum 128 characters, and contain a mix of uppercase, lowercase, numbers and special characters.');
     }
 
+    if (!validateRedisEngine(props.redisEngine)) {
+      throw new Error('Unsupported Redis engine. Supported engines are valkey, redis, memcached.');
+    }
+
     const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {
-      engine: "valkey",
+      engine: props.redisEngine,
       noPasswordRequired: false,
       userId: `${props.appName}-user`,
       userName: props.valkeyUserName,
@@ -50,7 +54,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     });
 
     const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
-      engine: "valkey",
+      engine: props.redisEngine,
       userGroupId: `${props.appName}-user-group`,
       userIds: [user.ref],
     });
@@ -64,7 +68,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       this,
       `${props.resourcePrefix}-ElastiCache-Serverless`,
       {
-        engine: "valkey",
+        engine: props.redisEngine,
         serverlessCacheName: `${props.appName}-${props.deployEnvironment}`,
         securityGroupIds: [elastiCacheSecurityGroup.securityGroupId],
         subnetIds: elastiCacheSubnetIds,

@@ -10,5 +10,6 @@ declare module NodeJS {
         VALKEY_USER_PASSWORD: string;
         VALKEY_ENGINE_VERSION: string;
         VALKEY_USER_NAME: string;
+        REDIS_ENGINE: string;
     }
 }
