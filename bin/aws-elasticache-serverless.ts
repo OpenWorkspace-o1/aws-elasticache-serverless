@@ -23,6 +23,10 @@ checkEnvVariables('APP_NAME',
     'VPC_SUBNET_TYPE',
     'OWNER',
     'VPC_ID',
+    'REDIS_USER_PASSWORD',
+    'REDIS_ENGINE_VERSION',
+    'REDIS_USER_NAME',
+    'REDIS_ENGINE',
 );
 
 const { CDK_DEFAULT_ACCOUNT: account } = process.env;
@@ -54,6 +58,10 @@ const stackProps: AwsElasticacheServerlessStackProps = {
     vpcSubnetType: process.env.VPC_SUBNET_TYPE!,
     owner,
     vpcId: process.env.VPC_ID!,
+    redisUserPassword: process.env.REDIS_USER_PASSWORD!,
+    redisEngineVersion: process.env.REDIS_ENGINE_VERSION!,
+    redisUserName: process.env.REDIS_USER_NAME!,
+    redisEngine: process.env.REDIS_ENGINE!,
 };
 new AwsElasticacheServerlessStack(app, `AwsElasticacheServerlessStack`, {
     ...stackProps,

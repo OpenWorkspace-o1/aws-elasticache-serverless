@@ -8,4 +8,8 @@ export interface AwsElasticacheServerlessStackProps extends StackProps {
     readonly vpcSubnetType: string;
     readonly owner: string;
     readonly vpcId: string;
+    readonly redisEngineVersion: string;
+    readonly redisUserName: string;
+    readonly redisUserPassword: string;
+    readonly redisEngine: string;
 }

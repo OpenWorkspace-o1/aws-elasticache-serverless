@@ -1,3 +1,54 @@
+## 2024-12-08
+
+### Changed
+- Updated Redis environment variable names from `VALKEY_*` to `REDIS_*` for improved clarity
+  * Renamed `VALKEY_USER_PASSWORD` to `REDIS_USER_PASSWORD`
+  * Renamed `VALKEY_ENGINE_VERSION` to `REDIS_ENGINE_VERSION`
+  * Renamed `VALKEY_USER_NAME` to `REDIS_USER_NAME`
+- Refactored environment variable references across multiple configuration files
+- Updated type declarations and example environment configuration
+
+## 2024-12-08
+
+### Added
+- Added configurable Redis engine support for AWS ElastiCache Serverless
+  * Introduced new environment variable `REDIS_ENGINE` for engine type selection
+  * Implemented `validateRedisEngine()` to support valkey, redis, and memcached engines
+  * Updated CDK stack to dynamically use specified Redis engine type
+
+### Changed
+- Modified environment variable validation to include `REDIS_ENGINE` parameter
+- Extended ElastiCache configuration to support flexible engine selection
+
+## 2024-12-08
+
+### Added
+- Added Valkey configuration for AWS ElastiCache Serverless
+  * Introduced new environment variables: `VALKEY_USER_PASSWORD`, `VALKEY_ENGINE_VERSION`, `VALKEY_USER_NAME`
+  * Implemented ElastiCache user and user group creation
+  * Added password and engine version validation utilities
+
+### Changed
+- Updated ElastiCache Serverless stack to support dynamic Valkey configuration
+  * Enabled dynamic Valkey engine version selection
+  * Added user group association with ElastiCache Serverless cache
+
+### Security
+- Implemented password validation to ensure strong credentials
+  * Enforced minimum 16-character password with mixed character types
+  * Added engine version validation to support only specific Valkey versions
+
+## 2024-12-08
+
+### Changed
+- Updated ElastiCache Serverless configuration to use `valkey` engine
+- Upgraded ElastiCache major engine version from `7` to `8`
+- Simplified KMS key import syntax from `aws_kms as kms` to `* as kms from 'aws-cdk-lib/aws-kms'`
+- Modified daily snapshot time from `"00:00-01:00"` to `"00:00"`
+
+### Added
+- Added TODO comment for future ElastiCache users and groups configuration
+
 ## 2024-12-07
 
 ### Added

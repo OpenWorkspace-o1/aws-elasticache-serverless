@@ -3,9 +3,10 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Construct } from 'constructs';
 import { aws_elasticache as ElastiCache } from "aws-cdk-lib";
 import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
-import { aws_kms as kms } from "aws-cdk-lib";
+import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
+import { validatePassword, validateRedisEngine, validateValkeyEngineVersion } from '../utils/check-environment-variable';
 
 export class AwsElasticacheServerlessStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: AwsElasticacheServerlessStackProps) {
@@ -31,24 +32,57 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       enableKeyRotation: true,
     });
 
+    // todo create user and group (CfnUser, CfnUserGroup)
+    // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-user.html
+    // https://stackoverflow.com/questions/46569432/does-redis-use-a-username-for-authentication
+    // Replaced redis with Valkey https://github.com/infiniflow/ragflow/pull/3164/files
+
+    if (!validatePassword(props.redisUserPassword)) {
+      throw new Error('Password must be at least 16 characters long, maximum 128 characters, and contain a mix of uppercase, lowercase, numbers and special characters.');
+    }
+
+    if (!validateRedisEngine(props.redisEngine)) {
+      throw new Error('Unsupported Redis engine. Supported engines are valkey, redis, memcached.');
+    }
+
+    const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {
+      engine: props.redisEngine,
+      noPasswordRequired: false,
+      userId: `${props.appName}-user`,
+      userName: props.redisUserName,
+      passwords: [props.redisUserPassword],
+    });
+
+    const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
+      engine: props.redisEngine,
+      userGroupId: `${props.appName}-user-group`,
+      userIds: [user.ref],
+    });
+
+    // check if the engine version is supported
+    if (!validateValkeyEngineVersion(props.redisEngineVersion)) {
+      throw new Error('Unsupported Valkey engine version. Supported versions are 7 and 8.');
+    }
+
     const elastiCacheServerless = new ElastiCache.CfnServerlessCache(
       this,
       `${props.resourcePrefix}-ElastiCache-Serverless`,
       {
-        engine: "redis",
+        engine: props.redisEngine,
         serverlessCacheName: `${props.appName}-${props.deployEnvironment}`,
         securityGroupIds: [elastiCacheSecurityGroup.securityGroupId],
         subnetIds: elastiCacheSubnetIds,
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
-        majorEngineVersion: "7",
-        dailySnapshotTime: "00:00-01:00",
+        majorEngineVersion: props.redisEngineVersion,
+        dailySnapshotTime: "00:00",
         snapshotRetentionLimit: 2,
         tags: [
           { key: 'environment', value: props.deployEnvironment },
           { key: 'project', value: props.appName },
           { key: 'owner', value: props.owner }
-        ]
+        ],
+        userGroupId: userGroup.ref,
       },
     );
 
