@@ -7,5 +7,6 @@ declare module NodeJS {
         VPC_ID: string;
         VPC_SUBNET_TYPE: string;
         OWNER: string;
+        VALKEY_USER_PASSWORD: string;
     }
 }

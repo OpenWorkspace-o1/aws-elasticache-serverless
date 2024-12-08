@@ -36,6 +36,25 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     // https://stackoverflow.com/questions/46569432/does-redis-use-a-username-for-authentication
     // Replaced redis with Valkey https://github.com/infiniflow/ragflow/pull/3164/files
 
+    const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {
+      engine: "valkey",
+      noPasswordRequired: false,
+      userId: "1234567890-user",
+      userName: "1234567890-user",
+      // https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-user-authenticationmode.html
+      authenticationMode: {
+        passwords: [props.valkeyUserPassword],
+        type: "password", // Allowed values: password | no-password-required | iam
+      },
+      passwords: [props.valkeyUserPassword],
+    });
+
+    const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
+      engine: "valkey",
+      userGroupId: "1234567890-user-group",
+      userIds: [user.userId],
+    });
+
     const elastiCacheServerless = new ElastiCache.CfnServerlessCache(
       this,
       `${props.resourcePrefix}-ElastiCache-Serverless`,
@@ -54,6 +73,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
           { key: 'project', value: props.appName },
           { key: 'owner', value: props.owner }
         ],
+        userGroupId: userGroup.userGroupId,
       },
     );
 
