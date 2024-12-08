@@ -1,6 +1,18 @@
 ## 2024-12-08
 
 ### Added
+- Added configurable Redis engine support for AWS ElastiCache Serverless
+  * Introduced new environment variable `REDIS_ENGINE` for engine type selection
+  * Implemented `validateRedisEngine()` to support valkey, redis, and memcached engines
+  * Updated CDK stack to dynamically use specified Redis engine type
+
+### Changed
+- Modified environment variable validation to include `REDIS_ENGINE` parameter
+- Extended ElastiCache configuration to support flexible engine selection
+
+## 2024-12-08
+
+### Added
 - Added Valkey configuration for AWS ElastiCache Serverless
   * Introduced new environment variables: `VALKEY_USER_PASSWORD`, `VALKEY_ENGINE_VERSION`, `VALKEY_USER_NAME`
   * Implemented ElastiCache user and user group creation
