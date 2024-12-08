@@ -81,3 +81,24 @@ export function validateValkeyEngineVersion(engineVersion: string): boolean {
 export function validateRedisEngine(engine: string): boolean {
     return ['valkey', 'redis', 'memcached'].includes(engine);
 }
+
+/**
+ * Gets the short environment name.
+ * @param environment - The environment to get the short name ('development' | 'staging' | 'production' | 'feature').
+ * @returns {string} - Returns the short environment name.
+ * @throws {Error} - Throws error if environment is not supported.
+ */
+export function getShortEnvironmentName(environment: string): string {
+    const envMap: Record<string, string> = {
+        'development': 'dev',
+        'staging': 'stg',
+        'production': 'prd',
+        'feature': 'futr'
+    };
+
+    if (!envMap[environment]) {
+        throw new Error(`Unsupported environment: ${environment}`);
+    }
+
+    return envMap[environment];
+}
