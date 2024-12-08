@@ -3,7 +3,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Construct } from 'constructs';
 import { aws_elasticache as ElastiCache } from "aws-cdk-lib";
 import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
-import { aws_kms as kms } from "aws-cdk-lib";
+import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
 
@@ -47,7 +47,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
         majorEngineVersion: "8",
-        dailySnapshotTime: "00:00-01:00",
+        dailySnapshotTime: "00:00",
         snapshotRetentionLimit: 2,
         tags: [
           { key: 'environment', value: props.deployEnvironment },
