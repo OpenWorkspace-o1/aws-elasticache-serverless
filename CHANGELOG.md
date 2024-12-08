@@ -1,5 +1,15 @@
 ## 2024-12-08
 
+### Changed
+- Updated Redis environment variable names from `VALKEY_*` to `REDIS_*` for improved clarity
+  * Renamed `VALKEY_USER_PASSWORD` to `REDIS_USER_PASSWORD`
+  * Renamed `VALKEY_ENGINE_VERSION` to `REDIS_ENGINE_VERSION`
+  * Renamed `VALKEY_USER_NAME` to `REDIS_USER_NAME`
+- Refactored environment variable references across multiple configuration files
+- Updated type declarations and example environment configuration
+
+## 2024-12-08
+
 ### Added
 - Added configurable Redis engine support for AWS ElastiCache Serverless
   * Introduced new environment variable `REDIS_ENGINE` for engine type selection

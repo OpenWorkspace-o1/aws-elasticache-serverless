@@ -37,7 +37,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     // https://stackoverflow.com/questions/46569432/does-redis-use-a-username-for-authentication
     // Replaced redis with Valkey https://github.com/infiniflow/ragflow/pull/3164/files
 
-    if (!validatePassword(props.valkeyUserPassword)) {
+    if (!validatePassword(props.redisUserPassword)) {
       throw new Error('Password must be at least 16 characters long, maximum 128 characters, and contain a mix of uppercase, lowercase, numbers and special characters.');
     }
 
@@ -49,8 +49,8 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       engine: props.redisEngine,
       noPasswordRequired: false,
       userId: `${props.appName}-user`,
-      userName: props.valkeyUserName,
-      passwords: [props.valkeyUserPassword],
+      userName: props.redisUserName,
+      passwords: [props.redisUserPassword],
     });
 
     const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
@@ -60,7 +60,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     });
 
     // check if the engine version is supported
-    if (!validateValkeyEngineVersion(props.valkeyEngineVersion)) {
+    if (!validateValkeyEngineVersion(props.redisEngineVersion)) {
       throw new Error('Unsupported Valkey engine version. Supported versions are 7 and 8.');
     }
 
@@ -74,7 +74,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         subnetIds: elastiCacheSubnetIds,
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
-        majorEngineVersion: props.valkeyEngineVersion,
+        majorEngineVersion: props.redisEngineVersion,
         dailySnapshotTime: "00:00",
         snapshotRetentionLimit: 2,
         tags: [
