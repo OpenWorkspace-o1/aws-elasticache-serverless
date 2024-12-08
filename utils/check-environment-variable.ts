@@ -37,3 +37,12 @@ export function isNotEmptyArray<T>(inputArray: T[] | undefined): boolean {
 export function validatePassword(password: string): boolean {
     return password.length >= 16 && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{16,}$/.test(password);
 }
+
+/**
+ * Validates a Valkey engine version.
+ * @param engineVersion - The engine version to validate.
+ * @returns {boolean} - Returns true if the engine version is supported, otherwise false.
+ */
+export function validateValkeyEngineVersion(engineVersion: string): boolean {
+    return ['7', '8'].includes(engineVersion);
+}

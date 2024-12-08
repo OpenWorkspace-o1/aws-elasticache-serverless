@@ -6,7 +6,7 @@ import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
-import { validatePassword } from '../utils/check-environment-variable';
+import { validatePassword, validateValkeyEngineVersion } from '../utils/check-environment-variable';
 
 export class AwsElasticacheServerlessStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: AwsElasticacheServerlessStackProps) {
@@ -56,7 +56,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     });
 
     // check if the engine version is supported
-    if (!['7', '8'].includes(props.valkeyEngineVersion)) {
+    if (!validateValkeyEngineVersion(props.valkeyEngineVersion)) {
       throw new Error('Unsupported Valkey engine version. Supported versions are 7 and 8.');
     }
 
