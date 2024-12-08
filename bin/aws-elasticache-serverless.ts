@@ -23,9 +23,9 @@ checkEnvVariables('APP_NAME',
     'VPC_SUBNET_TYPE',
     'OWNER',
     'VPC_ID',
-    'VALKEY_USER_PASSWORD',
-    'VALKEY_ENGINE_VERSION',
-    'VALKEY_USER_NAME',
+    'REDIS_USER_PASSWORD',
+    'REDIS_ENGINE_VERSION',
+    'REDIS_USER_NAME',
     'REDIS_ENGINE',
 );
 
@@ -58,9 +58,9 @@ const stackProps: AwsElasticacheServerlessStackProps = {
     vpcSubnetType: process.env.VPC_SUBNET_TYPE!,
     owner,
     vpcId: process.env.VPC_ID!,
-    valkeyUserPassword: process.env.VALKEY_USER_PASSWORD!,
-    valkeyEngineVersion: process.env.VALKEY_ENGINE_VERSION!,
-    valkeyUserName: process.env.VALKEY_USER_NAME!,
+    redisUserPassword: process.env.REDIS_USER_PASSWORD!,
+    redisEngineVersion: process.env.REDIS_ENGINE_VERSION!,
+    redisUserName: process.env.REDIS_USER_NAME!,
     redisEngine: process.env.REDIS_ENGINE!,
 };
 new AwsElasticacheServerlessStack(app, `AwsElasticacheServerlessStack`, {
