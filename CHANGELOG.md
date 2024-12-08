@@ -1,5 +1,15 @@
 ## 2024-12-08
 
+### Added
+- Introduced `getShortEnvironmentName()` utility function to generate short environment name abbreviations
+- Enhanced ElastiCache user and user group naming with environment-specific short names
+
+### Changed
+- Updated ElastiCache resource naming conventions to incorporate environment-specific abbreviations
+- Improved resource identifier consistency across different environments
+
+## 2024-12-08
+
 ### Changed
 - Updated Redis environment variable names from `VALKEY_*` to `REDIS_*` for improved clarity
   * Renamed `VALKEY_USER_PASSWORD` to `REDIS_USER_PASSWORD`
