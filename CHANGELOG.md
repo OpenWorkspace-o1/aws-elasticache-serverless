@@ -1,5 +1,19 @@
 ## 2024-12-09
 
+### Changed
+- Renamed `validateValkeyEngineVersion` to `validateRedisEngineVersion` for improved clarity
+- Updated ElastiCache user group ID to use a more consistent naming convention
+- Added removal policies to key AWS resources including security group, KMS key, ElastiCache user, and user group
+
+### Updated
+- Bumped package version from `0.1.0` to `0.1.1`
+- Updated `cdk-nag` dependency from `2.34.18` to `2.34.20`
+
+### Added
+- Exported KMS key ID and ARN as CloudFormation outputs
+
+## 2024-12-09
+
 ### Added
 - Added comprehensive property and class descriptions for `AwsElasticacheServerlessStack` and `AwsElasticacheServerlessStackProps`
 - Introduced `shortDeployEnvironment` to optimize resource naming
