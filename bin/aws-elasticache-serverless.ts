@@ -3,7 +3,7 @@ import 'source-map-support/register';
 
 import * as cdk from 'aws-cdk-lib';
 import * as dotenv from 'dotenv';
-import { checkEnvVariables } from '../utils/check-environment-variable';
+import { checkEnvVariables, getShortEnvironmentName } from '../utils/check-environment-variable';
 
 import { ApplyTags } from '../utils/apply-tag';
 import { Aspects } from 'aws-cdk-lib';
@@ -33,7 +33,7 @@ const { CDK_DEFAULT_ACCOUNT: account } = process.env;
 
 const cdkRegion = process.env.CDK_DEPLOY_REGION;
 const deployEnvironment = process.env.ENVIRONMENT!;
-
+const shortDeployEnvironment = getShortEnvironmentName(deployEnvironment);
 const appName = process.env.APP_NAME!;
 const owner = process.env.OWNER!;
 
@@ -47,13 +47,14 @@ appAspects.add(new ApplyTags({
 }));
 
 const stackProps: AwsElasticacheServerlessStackProps = {
-    resourcePrefix: `${appName}-${deployEnvironment}`,
+    resourcePrefix: `${appName}-${shortDeployEnvironment}`,
     env: {
         region: cdkRegion,
         account,
     },
     deployRegion: cdkRegion,
     deployEnvironment,
+    shortDeployEnvironment,
     appName,
     vpcSubnetType: process.env.VPC_SUBNET_TYPE!,
     owner,

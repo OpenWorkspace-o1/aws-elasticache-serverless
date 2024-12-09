@@ -6,7 +6,7 @@ import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
-import { getShortEnvironmentName, validatePassword, validateRedisEngine, validateValkeyEngineVersion } from '../utils/check-environment-variable';
+import { validatePassword, validateRedisEngine, validateValkeyEngineVersion } from '../utils/check-environment-variable';
 
 export class AwsElasticacheServerlessStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: AwsElasticacheServerlessStackProps) {
@@ -45,18 +45,17 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       throw new Error('Unsupported Redis engine. Supported engines are valkey, redis, memcached.');
     }
 
-    const shortEnvironmentName = getShortEnvironmentName(props.deployEnvironment);
     const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {
       engine: props.redisEngine,
       noPasswordRequired: false,
-      userId: `${props.appName}-${shortEnvironmentName}-usr`,
+      userId: `${props.resourcePrefix}-usr`,
       userName: props.redisUserName,
       passwords: [props.redisUserPassword],
     });
 
     const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
       engine: props.redisEngine,
-      userGroupId: `${props.appName}-${shortEnvironmentName}-grp`,
+      userGroupId: `${props.resourcePrefix}-grp`,
       userIds: [user.ref],
     });
 
