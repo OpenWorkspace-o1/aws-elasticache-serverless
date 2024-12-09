@@ -8,7 +8,43 @@ import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessSt
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
 import { validatePassword, validateRedisEngine, validateValkeyEngineVersion } from '../utils/check-environment-variable';
 
+/**
+ * AWS CDK Stack for deploying an Amazon ElastiCache Serverless instance.
+ *
+ * This stack creates the following AWS resources:
+ * - ElastiCache Serverless instance in specified VPC
+ * - Security Group for ElastiCache access control
+ * - KMS Key for encryption
+ * - ElastiCache User and User Group for authentication
+ * - Daily snapshots configuration
+ *
+ * The stack supports both Redis and Valkey engines, with configurable engine versions,
+ * and implements security best practices including:
+ * - Password validation
+ * - KMS encryption
+ * - VPC isolation
+ * - Security group controls
+ *
+ * @example
+ * ```typescript
+ * new AwsElasticacheServerlessStack(app, 'MyElastiCacheStack', {
+ *   resourcePrefix: 'myapp-prod',
+ *   deployEnvironment: 'production',
+ *   // ... other required properties
+ * });
+ * ```
+ */
 export class AwsElasticacheServerlessStack extends cdk.Stack {
+  /**
+   * Creates a new instance of AwsElasticacheServerlessStack
+   *
+   * @param scope - The scope in which to define this construct
+   * @param id - The scoped construct ID. Must be unique amongst siblings
+   * @param props - Configuration properties for the stack
+   * @throws {Error} If password validation fails
+   * @throws {Error} If unsupported engine is specified
+   * @throws {Error} If unsupported engine version is specified
+   */
   constructor(scope: Construct, id: string, props: AwsElasticacheServerlessStackProps) {
     super(scope, id, props);
 
