@@ -68,7 +68,7 @@ export function validatePassword(password: string): boolean {
  * @param engineVersion - The engine version to validate.
  * @returns {boolean} - Returns true if the engine version is supported, otherwise false.
  */
-export function validateValkeyEngineVersion(engineVersion: string): boolean {
+export function validateRedisEngineVersion(engineVersion: string): boolean {
     return ['7', '8'].includes(engineVersion);
 }
 
