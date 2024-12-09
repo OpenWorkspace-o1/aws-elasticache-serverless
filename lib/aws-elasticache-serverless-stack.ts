@@ -6,7 +6,7 @@ import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
-import { validatePassword, validateRedisEngine, validateValkeyEngineVersion } from '../utils/check-environment-variable';
+import { validatePassword, validateRedisEngine, validateRedisEngineVersion } from '../utils/check-environment-variable';
 
 /**
  * AWS CDK Stack for deploying an Amazon ElastiCache Serverless instance.
@@ -62,10 +62,12 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       description: `${props.resourcePrefix}-ElastiCache-Security-Group`,
       allowAllOutbound: true,
     });
+    elastiCacheSecurityGroup.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
 
     const kmsKey = new kms.Key(this, `${props.resourcePrefix}-KMS-Key`, {
       description: `${props.resourcePrefix}-KMS-Key`,
       enableKeyRotation: true,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     // todo create user and group (CfnUser, CfnUserGroup)
@@ -88,15 +90,17 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       userName: props.redisUserName,
       passwords: [props.redisUserPassword],
     });
+    user.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
 
     const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
       engine: props.redisEngine,
-      userGroupId: `${props.resourcePrefix}-grp`,
+      userGroupId: `${props.resourcePrefix}-usr-grp`,
       userIds: [user.ref],
     });
+    userGroup.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
 
     // check if the engine version is supported
-    if (!validateValkeyEngineVersion(props.redisEngineVersion)) {
+    if (!validateRedisEngineVersion(props.redisEngineVersion)) {
       throw new Error('Unsupported Valkey engine version. Supported versions are 7 and 8.');
     }
 
@@ -134,6 +138,20 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       value: elastiCacheServerless.ref,
       exportName: `${props.resourcePrefix}-ElastiCache-Serverless-Id`,
       description: `${props.resourcePrefix}-ElastiCache-Serverless-Id`,
+    });
+
+    // export kmsKey Id
+    new cdk.CfnOutput(this, `${props.resourcePrefix}-KMS-Key-Id`, {
+      value: kmsKey.keyId,
+      exportName: `${props.resourcePrefix}-KMS-Key-Id`,
+      description: `${props.resourcePrefix}-KMS-Key-Id`,
+    });
+
+    // export kmsKey arn
+    new cdk.CfnOutput(this, `${props.resourcePrefix}-KMS-Key-Arn`, {
+      value: kmsKey.keyArn,
+      exportName: `${props.resourcePrefix}-KMS-Key-Arn`,
+      description: `${props.resourcePrefix}-KMS-Key-Arn`,
     });
   }
 }
