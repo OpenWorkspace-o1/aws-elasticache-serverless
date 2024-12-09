@@ -6,9 +6,45 @@ import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
 import { parseVpcSubnetType } from '../utils/vpc-type-parser';
-import { getShortEnvironmentName, validatePassword, validateRedisEngine, validateValkeyEngineVersion } from '../utils/check-environment-variable';
+import { validatePassword, validateRedisEngine, validateValkeyEngineVersion } from '../utils/check-environment-variable';
 
+/**
+ * AWS CDK Stack for deploying an Amazon ElastiCache Serverless instance.
+ *
+ * This stack creates the following AWS resources:
+ * - ElastiCache Serverless instance in specified VPC
+ * - Security Group for ElastiCache access control
+ * - KMS Key for encryption
+ * - ElastiCache User and User Group for authentication
+ * - Daily snapshots configuration
+ *
+ * The stack supports both Redis and Valkey engines, with configurable engine versions,
+ * and implements security best practices including:
+ * - Password validation
+ * - KMS encryption
+ * - VPC isolation
+ * - Security group controls
+ *
+ * @example
+ * ```typescript
+ * new AwsElasticacheServerlessStack(app, 'MyElastiCacheStack', {
+ *   resourcePrefix: 'myapp-prod',
+ *   deployEnvironment: 'production',
+ *   // ... other required properties
+ * });
+ * ```
+ */
 export class AwsElasticacheServerlessStack extends cdk.Stack {
+  /**
+   * Creates a new instance of AwsElasticacheServerlessStack
+   *
+   * @param scope - The scope in which to define this construct
+   * @param id - The scoped construct ID. Must be unique amongst siblings
+   * @param props - Configuration properties for the stack
+   * @throws {Error} If password validation fails
+   * @throws {Error} If unsupported engine is specified
+   * @throws {Error} If unsupported engine version is specified
+   */
   constructor(scope: Construct, id: string, props: AwsElasticacheServerlessStackProps) {
     super(scope, id, props);
 
@@ -45,18 +81,17 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       throw new Error('Unsupported Redis engine. Supported engines are valkey, redis, memcached.');
     }
 
-    const shortEnvironmentName = getShortEnvironmentName(props.deployEnvironment);
     const user = new ElastiCache.CfnUser(this, `${props.resourcePrefix}-ElastiCache-User`, {
       engine: props.redisEngine,
       noPasswordRequired: false,
-      userId: `${props.appName}-${shortEnvironmentName}-usr`,
+      userId: `${props.resourcePrefix}-usr`,
       userName: props.redisUserName,
       passwords: [props.redisUserPassword],
     });
 
     const userGroup = new ElastiCache.CfnUserGroup(this, `${props.resourcePrefix}-ElastiCache-User-Group`, {
       engine: props.redisEngine,
-      userGroupId: `${props.appName}-${shortEnvironmentName}-grp`,
+      userGroupId: `${props.resourcePrefix}-grp`,
       userIds: [user.ref],
     });
 

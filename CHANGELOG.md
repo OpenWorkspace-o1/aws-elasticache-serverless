@@ -1,3 +1,18 @@
+## 2024-12-09
+
+### Added
+- Added comprehensive property and class descriptions for `AwsElasticacheServerlessStack` and `AwsElasticacheServerlessStackProps`
+- Introduced `shortDeployEnvironment` to optimize resource naming
+
+### Changed
+- Updated resource naming to use `shortDeployEnvironment` for more consistent identifiers
+- Modified user and user group ID generation to use `resourcePrefix`
+- Simplified `APP_NAME` in example environment file from `ow-elasticache-serverless` to `ow-redis-serverless`
+
+### Improved
+- Enhanced error handling and validation for Redis configuration
+- Improved documentation for AWS ElastiCache Serverless CDK stack properties and methods
+
 ## 2024-12-08
 
 ### Added
