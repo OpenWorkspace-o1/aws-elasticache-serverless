@@ -1,6 +1,6 @@
 {
   "name": "aws-elasticache-serverless",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "bin": {
     "aws-elasticache-serverless": "bin/aws-elasticache-serverless.js"
   },
@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.172.0",
-    "cdk-nag": "^2.34.18",
+    "cdk-nag": "^2.34.20",
     "constructs": "^10.4.2",
     "dotenv": "^16.4.7"
   },
