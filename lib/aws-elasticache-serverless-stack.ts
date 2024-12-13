@@ -153,5 +153,20 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       exportName: `${props.resourcePrefix}-KMS-Key-Arn`,
       description: `${props.resourcePrefix}-KMS-Key-Arn`,
     });
+
+    const endpointAddress = elastiCacheServerless.attrEndpointAddress;
+    const endpointPort = elastiCacheServerless.attrEndpointPort;
+
+    new cdk.CfnOutput(this, `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Address`, {
+      value: endpointAddress,
+      exportName: `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Address`,
+      description: `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Address`,
+    });
+
+    new cdk.CfnOutput(this, `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Port`, {
+      value: endpointPort,
+      exportName: `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Port`,
+      description: `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Port`,
+    });
   }
 }
