@@ -1,6 +1,6 @@
 {
   "name": "aws-elasticache-serverless",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "bin": {
     "aws-elasticache-serverless": "bin/aws-elasticache-serverless.js"
   },
