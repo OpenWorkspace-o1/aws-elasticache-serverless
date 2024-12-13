@@ -1,3 +1,16 @@
+## 2024-12-13
+
+### Added
+- Exported Redis serverless endpoint address and port as CloudFormation outputs
+
+### Updated
+- Bumped package version from `0.1.1` to `0.1.3`
+- Updated dependencies:
+  * Upgraded `aws-cdk` from `2.172.0` to `2.173.0`
+  * Upgraded `aws-cdk-lib` from `2.172.0` to `2.173.0`
+  * Upgraded `@types/node` from `22.10.1` to `22.10.2`
+  * Upgraded `cdk-nag` from `2.34.20` to `2.34.23
+
 ## 2024-12-09
 
 ### Changed
