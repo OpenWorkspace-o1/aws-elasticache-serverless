@@ -50,6 +50,12 @@ export interface AwsElasticacheServerlessStackProps extends StackProps {
     readonly vpcId: string;
 
     /**
+     * IDs of the private subnets where ElastiCache will be deployed
+     * Example: "subnet-1234567890abcdef0,subnet-1234567890abcdef1,subnet-1234567890abcdef2"
+     */
+    readonly vpcPrivateSubnetIds: string[];
+
+    /**
      * Version of Redis engine to use
      * Example: "7.0"
      */

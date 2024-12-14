@@ -4,9 +4,10 @@ declare module NodeJS {
         CDK_DEPLOY_REGION: string;
         ENVIRONMENT: string;
         APP_NAME: string;
+        OWNER: string;
         VPC_ID: string;
         VPC_SUBNET_TYPE: string;
-        OWNER: string;
+        VPC_PRIVATE_SUBNET_IDS: string;
         REDIS_USER_PASSWORD: string;
         REDIS_ENGINE_VERSION: string;
         REDIS_USER_NAME: string;

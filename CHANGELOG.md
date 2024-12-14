@@ -1,3 +1,13 @@
+## 2024-12-14
+
+### Added
+- Added `VPC_PRIVATE_SUBNET_IDS` environment variable to explicitly specify private subnet IDs for ElastiCache deployment
+- Enhanced environment variable validation to include new subnet IDs configuration
+
+### Changed
+- Updated `AwsElasticacheServerlessStackProps` to support specifying precise subnet IDs for ElastiCache
+- Modified ElastiCache Serverless stack to use explicitly defined private subnet IDs instead of automatically selecting subnets
+
 ## 2024-12-13
 
 ### Added
