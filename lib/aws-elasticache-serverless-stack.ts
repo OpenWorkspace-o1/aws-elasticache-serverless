@@ -53,9 +53,6 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     });
 
     const vpcSubnetType = parseVpcSubnetType(props.vpcSubnetType);
-    const elastiCacheSubnetIds = vpc.selectSubnets({
-      subnetType: vpcSubnetType,
-    }).subnetIds;
 
     const elastiCacheSecurityGroup = new SecurityGroup(this, `${props.resourcePrefix}-ElastiCache-Security-Group`, {
       vpc,
@@ -111,7 +108,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         engine: props.redisEngine,
         serverlessCacheName: `${props.appName}-${props.deployEnvironment}`,
         securityGroupIds: [elastiCacheSecurityGroup.securityGroupId],
-        subnetIds: elastiCacheSubnetIds,
+        subnetIds: props.vpcPrivateSubnetIds,
         kmsKeyId: kmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
         majorEngineVersion: props.redisEngineVersion,
