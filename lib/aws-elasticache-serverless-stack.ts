@@ -54,6 +54,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
 
     const elastiCacheSecurityGroup = new SecurityGroup(this, `${props.resourcePrefix}-ElastiCache-Security-Group`, {
       vpc,
+      allowAllOutbound: false,
       description: `${props.resourcePrefix}-ElastiCache-Security-Group`,
     });
     elastiCacheSecurityGroup.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
