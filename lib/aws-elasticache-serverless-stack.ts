@@ -52,12 +52,10 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
       vpcId: props.vpcId,
     });
 
-    const vpcSubnetType = parseVpcSubnetType(props.vpcSubnetType);
-
     const elastiCacheSecurityGroup = new SecurityGroup(this, `${props.resourcePrefix}-ElastiCache-Security-Group`, {
       vpc,
+      allowAllOutbound: false,
       description: `${props.resourcePrefix}-ElastiCache-Security-Group`,
-      allowAllOutbound: true,
     });
     elastiCacheSecurityGroup.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
 
