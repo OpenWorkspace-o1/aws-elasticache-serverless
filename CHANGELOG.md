@@ -1,3 +1,12 @@
+## 2024-12-18
+
+### Changed
+- Removed redundant import of `parseVpcSubnetType` from AWS ElastiCache Serverless stack
+- Updated `OWNER` environment variable in `.env.example` from `OPENWORKSPACE` to `OpenWorkspace-o1`
+
+### Improved
+- Enhanced clarity and maintainability of AWS CDK stack for ElastiCache Serverless deployment
+
 ## 2024-12-14
 
 ### Added
