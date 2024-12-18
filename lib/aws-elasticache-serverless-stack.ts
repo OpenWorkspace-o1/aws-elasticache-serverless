@@ -5,7 +5,6 @@ import { aws_elasticache as ElastiCache } from "aws-cdk-lib";
 import { SecurityGroup } from "aws-cdk-lib/aws-ec2";
 import * as kms from 'aws-cdk-lib/aws-kms';
 import { AwsElasticacheServerlessStackProps } from './AwsElasticacheServerlessStackProps';
-import { parseVpcSubnetType } from '../utils/vpc-type-parser';
 import { validatePassword, validateRedisEngine, validateRedisEngineVersion } from '../utils/check-environment-variable';
 
 /**
