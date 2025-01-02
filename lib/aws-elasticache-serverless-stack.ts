@@ -59,9 +59,11 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     elastiCacheSecurityGroup.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
 
     const kmsKey = new kms.Key(this, `${props.resourcePrefix}-KMS-Key`, {
-      description: `${props.resourcePrefix}-KMS-Key`,
+      enabled: true,
       enableKeyRotation: true,
+      description: `${props.resourcePrefix}-KMS-Key`,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      rotationPeriod: cdk.Duration.days(30),
     });
 
     // todo create user and group (CfnUser, CfnUserGroup)
