@@ -6,7 +6,7 @@
 ### Updated
 - Upgraded `aws-cdk` and `aws-cdk-lib` dependencies to version `2.173.4`
 - Bumped project version from `0.1.4` to `0.1.5`
-- Updated `@types/node` from `22.10.2` to `22.10.3
+- Updated `@types/node` from `22.10.2` to `22.10.3`
 
 ## 2024-12-18
 
