@@ -152,26 +152,26 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
 
     const elastiCacheServerlessEndpoint = elastiCacheServerless.endpoint as ElastiCache.CfnServerlessCache.EndpointProperty;
     new cdk.CfnOutput(this, `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Address`, {
-      value: elastiCacheServerlessEndpoint.address || '',
+      value: elastiCacheServerlessEndpoint?.address || '',
       exportName: `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint`,
       description: `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint`,
     });
 
     new cdk.CfnOutput(this, `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Port`, {
-      value: elastiCacheServerlessEndpoint.port || '',
+      value: elastiCacheServerlessEndpoint?.port || '',
       exportName: `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Port`,
       description: `${props.resourcePrefix}-ElastiCache-Serverless-Endpoint-Port`,
     });
 
     const elastiCacheServerlessReaderEndpoint = elastiCacheServerless.readerEndpoint as ElastiCache.CfnServerlessCache.EndpointProperty;
     new cdk.CfnOutput(this, `${props.resourcePrefix}-ElastiCache-Serverless-Reader-Endpoint-Address`, {
-      value: elastiCacheServerlessReaderEndpoint.address || '',
+      value: elastiCacheServerlessReaderEndpoint?.address || '',
       exportName: `${props.resourcePrefix}-ElastiCache-Serverless-Reader-Endpoint-Address`,
       description: `${props.resourcePrefix}-ElastiCache-Serverless-Reader-Endpoint-Address`,
     });
 
     new cdk.CfnOutput(this, `${props.resourcePrefix}-ElastiCache-Serverless-Reader-Endpoint-Port`, {
-      value: elastiCacheServerlessReaderEndpoint.port || '',
+      value: elastiCacheServerlessReaderEndpoint?.port || '',
       exportName: `${props.resourcePrefix}-ElastiCache-Serverless-Reader-Endpoint-Port`,
       description: `${props.resourcePrefix}-ElastiCache-Serverless-Reader-Endpoint-Port`,
     });
