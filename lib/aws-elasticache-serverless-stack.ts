@@ -58,10 +58,10 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     });
     elastiCacheSecurityGroup.applyRemovalPolicy(cdk.RemovalPolicy.DESTROY);
 
-    const kmsKey = new kms.Key(this, `${props.resourcePrefix}-KMS-Key`, {
+    const elastiCacheKmsKey = new kms.Key(this, `${props.resourcePrefix}-elasticache-kms-key`, {
       enabled: true,
       enableKeyRotation: true,
-      description: `${props.resourcePrefix}-KMS-Key`,
+      description: `${props.resourcePrefix}-elasticache-kms-key`,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       rotationPeriod: cdk.Duration.days(30),
     });
@@ -108,7 +108,7 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         serverlessCacheName: `${props.appName}-${props.deployEnvironment}`,
         securityGroupIds: [elastiCacheSecurityGroup.securityGroupId],
         subnetIds: props.vpcPrivateSubnetIds,
-        kmsKeyId: kmsKey.keyId,
+        kmsKeyId: elastiCacheKmsKey.keyId,
         description: `${props.resourcePrefix}-ElastiCache-Serverless`,
         majorEngineVersion: props.redisEngineVersion,
         dailySnapshotTime: "00:00",
@@ -137,17 +137,17 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
     });
 
     // export kmsKey Id
-    new cdk.CfnOutput(this, `${props.resourcePrefix}-KMS-Key-Id`, {
-      value: kmsKey.keyId,
-      exportName: `${props.resourcePrefix}-KMS-Key-Id`,
-      description: `${props.resourcePrefix}-KMS-Key-Id`,
+    new cdk.CfnOutput(this, `${props.resourcePrefix}-elasticache-kms-key-id`, {
+      value: elastiCacheKmsKey.keyId,
+      exportName: `${props.resourcePrefix}-elasticache-kms-key-id`,
+      description: `${props.resourcePrefix}-elasticache-kms-key-id`,
     });
 
     // export kmsKey arn
-    new cdk.CfnOutput(this, `${props.resourcePrefix}-KMS-Key-Arn`, {
-      value: kmsKey.keyArn,
-      exportName: `${props.resourcePrefix}-KMS-Key-Arn`,
-      description: `${props.resourcePrefix}-KMS-Key-Arn`,
+    new cdk.CfnOutput(this, `${props.resourcePrefix}-elasticache-kms-key-arn`, {
+      value: elastiCacheKmsKey.keyArn,
+      exportName: `${props.resourcePrefix}-elasticache-kms-key-arn`,
+      description: `${props.resourcePrefix}-elasticache-kms-key-arn`,
     });
 
     const elastiCacheServerlessEndpoint = elastiCacheServerless.endpoint as ElastiCache.CfnServerlessCache.EndpointProperty;
