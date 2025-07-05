@@ -113,11 +113,6 @@ export class AwsElasticacheServerlessStack extends cdk.Stack {
         majorEngineVersion: props.redisEngineVersion,
         dailySnapshotTime: "00:00",
         snapshotRetentionLimit: 2,
-        tags: [
-          { key: 'environment', value: props.deployEnvironment },
-          { key: 'project', value: props.appName },
-          { key: 'owner', value: props.owner }
-        ],
         userGroupId: userGroup.ref,
       },
     );
